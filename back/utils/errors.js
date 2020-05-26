@@ -10,6 +10,9 @@ const Errors = {
   user: {
     missingValue: "Fields: name, email and password can't be empty.",
   },
+  post: {
+    missingValue: "Fields: title and content can't be empty.",
+  },
 };
 
 module.exports = Errors;
