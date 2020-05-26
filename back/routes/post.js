@@ -32,9 +32,24 @@ router
       console.error(error);
       res.status(404).send(Errors.generic.default);
     }
+  });
+
+router
+  .route("/:_id")
+  .get(async (req, res) => {
+    const { _id } = req.params;
+    try {
+      const post = await Post.findById(_id);
+      res.send(post);
+    } catch (error) {
+      console.error(error);
+      res.status(404).send(Errors.generic.default);
+    }
   })
   .put(async (req, res) => {
-    const { _id, title, content, isUpdating } = req.body;
+    const { title, content, isUpdating } = req.body;
+    const { _id } = req.params;
+
     if (!title || !content) {
       res.status(404).send(Errors.post.missingValue);
       return;
@@ -53,7 +68,7 @@ router
     }
   })
   .delete(async (req, res) => {
-    const { _id } = req.body;
+    const { _id } = req.params;
 
     try {
       const deletedPost = await Post.delete(_id);
@@ -63,16 +78,5 @@ router
       res.status(404).send(Errors.generic.default);
     }
   });
-
-router.route("/:_id").get(async (req, res) => {
-  const { _id } = req.params;
-  try {
-    const post = await Post.findById(_id);
-    res.send(post);
-  } catch (error) {
-    console.error(error);
-    res.status(404).send(Errors.generic.default);
-  }
-});
 
 module.exports = router;
