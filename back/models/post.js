@@ -66,6 +66,7 @@ const Post = {
     return foundPosts;
   },
   findById: async (_id) => {
+    // TODO: aggregate comments author
     const foundPost = await postCollection.findOne({ _id });
     return foundPost;
   },
