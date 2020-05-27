@@ -79,4 +79,16 @@ router
     }
   });
 
+router.route("/:_id/clap").post(async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const post = await Post.findById(_id);
+    const updatedPost = await Post.update({ _id, claps: post.claps + 1 });
+    res.send(updatedPost);
+  } catch (error) {
+    console.error(error);
+    res.status(406).send(Errors.generic.default);
+  }
+});
+
 module.exports = router;
