@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Detail(props) {
-  const post = useRequest("get", `/post/${props._id}`);
+  const [post] = useRequest("get", `/post/${props._id}`);
 
   const classes = useStyles();
   if (!post) return <></>;
