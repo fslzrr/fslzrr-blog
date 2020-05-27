@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles, Typography } from "@material-ui/core";
-import useRequest from "../hooks/useRequest";
+import { useRequest } from "../hooks/useRequest";
 import PostPreview from "../views/PostPreview";
 
 const useStyles = makeStyles((theme) => ({

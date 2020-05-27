@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.route("/").post(async (req, res) => {
   const { name, email, password } = req.body;
+
   if (!name || !email || !password) {
     res.status(406).send(Errors.user.missingValue);
     return;

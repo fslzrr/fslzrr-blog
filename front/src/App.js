@@ -5,6 +5,7 @@ import {
   IconButton,
   Typography,
   makeStyles,
+  Menu,
 } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -12,6 +13,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "./config/theme";
 import PageHome from "./pages/Home";
 import PageDetail from "./pages/Detail";
+import Account from "./views/Account";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +43,14 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [postId, setPostId] = useState(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const onProfileClose = () => setIsProfileOpen(false);
+  const onProfileOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+    setIsProfileOpen(true);
+  };
   const onPostClick = (_id) => setPostId(_id);
   const onBack = () => setPostId(null);
 
@@ -54,11 +63,20 @@ function App() {
           <Typography variant="h6" className={classes.title}>
             fslzrr's blog
           </Typography>
-          <IconButton edge="start" color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            ref={anchorEl}
+            onClick={onProfileOpen}
+          >
             <AccountCircleIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <Menu open={isProfileOpen} onClose={onProfileClose} anchorEl={anchorEl}>
+        <Account></Account>
+      </Menu>
       <div className={classes.heroImage}></div>
       <div className={classes.container}>
         {!postId && <PageHome onPostClick={onPostClick}></PageHome>}

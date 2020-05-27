@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Typography, IconButton, makeStyles, Paper } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import useRequest from "../hooks/useRequest";
+import { useRequest } from "../hooks/useRequest";
 import Comment from "../views/Comment";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +58,12 @@ function Detail(props) {
         Comments
       </Typography>
       {post.comments.length === 0 && (
-        <Typography variant="caption">Anyone has commented yet 😞</Typography>
+        <Typography variant="caption">
+          Anyone has commented yet{" "}
+          <span role="img" aria-label="sad">
+            😞
+          </span>
+        </Typography>
       )}
       {post.comments.length > 0 &&
         post.comments.map((comment) => (

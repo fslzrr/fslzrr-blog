@@ -23,4 +23,7 @@ const useRequest = (verb, path, params = {}, data = {}) => {
   return response;
 };
 
-export default useRequest;
+const post = async (path, params = {}, data = {}) =>
+  await axios.post(API_URL + path, data, { params });
+
+export { useRequest, post };
