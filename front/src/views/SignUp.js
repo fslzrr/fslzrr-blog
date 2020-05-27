@@ -35,6 +35,8 @@ function SignUp(props) {
       return;
     if (password !== confirmPassword) return;
     const res = await post("/user", {}, { name, email, password });
+    const { token, user } = res.data;
+    props.onLoggedIn(token, user);
   };
 
   const classes = useStyles();

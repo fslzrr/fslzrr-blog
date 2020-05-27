@@ -11,6 +11,8 @@ function LogIn(props) {
   const login = async () => {
     if (email.trim() === "" || password === "") return;
     const res = await post("/auth/login", {}, { email, password });
+    const { token, user } = res.data;
+    props.onLoggedIn(token, user);
   };
 
   return (
@@ -43,10 +45,12 @@ function LogIn(props) {
       >
         Log In
       </Button>
+      <p></p>
       <Button
         fullWidth
         disableElevation
-        variant="outline"
+        variant="contained"
+        color="primary"
         onClick={props.onSignUp}
       >
         Sign Up

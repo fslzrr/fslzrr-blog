@@ -14,6 +14,7 @@ import theme from "./config/theme";
 import PageHome from "./pages/Home";
 import PageDetail from "./pages/Detail";
 import Account from "./views/Account";
+import AuthContext from "./contexts/authContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +43,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+  const setAuth = (token, user) => {
+    const t = `Bearer ${token}`;
+    setToken(t);
+    setUser(user);
+    localStorage.setItem("token", t);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+  const clearAuth = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  };
+
   const [postId, setPostId] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,12 +69,20 @@ function App() {
     setAnchorEl(event.currentTarget);
     setIsProfileOpen(true);
   };
+
   const onPostClick = (_id) => setPostId(_id);
   const onBack = () => setPostId(null);
 
   const classes = useStyles();
   return (
-    <>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        setAuth,
+        clearAuth,
+      }}
+    >
       <AppBar position="static">
         <Toolbar>
           <CodeIcon className={classes.icon} />
@@ -82,7 +108,7 @@ function App() {
         {!postId && <PageHome onPostClick={onPostClick}></PageHome>}
         {postId && <PageDetail _id={postId} onBack={onBack}></PageDetail>}
       </div>
-    </>
+    </AuthContext.Provider>
   );
 }
 
