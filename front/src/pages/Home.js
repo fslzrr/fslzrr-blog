@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home(props) {
-  const classes = useStyles();
   const posts = useRequest("get", "/post");
 
+  const classes = useStyles();
   return (
     <>
       <div className={classes.heroImage}></div>
@@ -40,7 +40,10 @@ function Home(props) {
         {posts &&
           posts.map((post) => (
             <div key={post._id} className={classes.blogPreview}>
-              <PostPreview post={post}></PostPreview>
+              <PostPreview
+                post={post}
+                onClick={() => props.onPostClick(post._id)}
+              ></PostPreview>
             </div>
           ))}
       </div>

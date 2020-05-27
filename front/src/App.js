@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [postId, setPostId] = useState(null);
+
+  const onPostClick = (_id) => setPostId(_id);
+
   const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
@@ -45,7 +49,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <div className={classes.container}>
-        <PageHome></PageHome>
+        {!postId && <PageHome onPostClick={onPostClick}></PageHome>}
       </div>
     </ThemeProvider>
   );
