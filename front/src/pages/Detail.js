@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   titleComments: {
     marginBottom: 16,
   },
+  emptyComments: {
+    marginBottom: 16,
+  },
   comment: {
     marginBottom: 16,
   },
@@ -109,12 +112,14 @@ function Detail(props) {
         Comments
       </Typography>
       {post.comments.length === 0 && (
-        <Typography variant="caption">
-          Anyone has commented yet{" "}
-          <span role="img" aria-label="sad">
-            😞
-          </span>
-        </Typography>
+        <div className={classes.emptyComments}>
+          <Typography variant="caption">
+            Anyone has commented yet{" "}
+            <span role="img" aria-label="sad">
+              😞
+            </span>
+          </Typography>
+        </div>
       )}
       {post.comments.length > 0 &&
         post.comments.map((comment) => (
