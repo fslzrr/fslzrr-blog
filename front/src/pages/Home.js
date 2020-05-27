@@ -4,15 +4,6 @@ import useRequest from "../hooks/useRequest";
 import PostPreview from "../views/PostPreview";
 
 const useStyles = makeStyles((theme) => ({
-  heroImage: {
-    position: "absolute",
-    zIndex: -1,
-    left: 0,
-    top: 0,
-    height: "30vh",
-    width: "100vw",
-    backgroundColor: theme.palette.primary.light,
-  },
   title: {
     marginBottom: 16,
     color: "white",
@@ -31,7 +22,6 @@ function Home(props) {
   const classes = useStyles();
   return (
     <>
-      <div className={classes.heroImage}></div>
       <Typography variant="h4" className={classes.title}>
         Latests Blogs
       </Typography>

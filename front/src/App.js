@@ -11,6 +11,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./config/theme";
 import PageHome from "./pages/Home";
+import PageDetail from "./pages/Detail";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,15 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  heroImage: {
+    position: "absolute",
+    zIndex: -1,
+    left: 0,
+    top: 0,
+    height: "30vh",
+    width: "100vw",
+    backgroundColor: theme.palette.primary.light,
   },
   container: {
     padding: 16,
@@ -33,10 +43,11 @@ function App() {
   const [postId, setPostId] = useState(null);
 
   const onPostClick = (_id) => setPostId(_id);
+  const onBack = () => setPostId(null);
 
   const classes = useStyles();
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <AppBar position="static">
         <Toolbar>
           <CodeIcon className={classes.icon} />
@@ -48,11 +59,21 @@ function App() {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <div className={classes.heroImage}></div>
       <div className={classes.container}>
         {!postId && <PageHome onPostClick={onPostClick}></PageHome>}
+        {postId && <PageDetail _id={postId} onBack={onBack}></PageDetail>}
       </div>
+    </>
+  );
+}
+
+function AppWrapper() {
+  return (
+    <ThemeProvider theme={theme}>
+      <App></App>
     </ThemeProvider>
   );
 }
 
-export default App;
+export default AppWrapper;
