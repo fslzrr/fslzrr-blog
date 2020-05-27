@@ -6,14 +6,17 @@ const router = express.Router();
 
 router.route("/:_postId").post(async (req, res) => {
   const { _postId } = req.params;
-  const { content, author } = req.body;
+  const { content } = req.body;
   if (!content) {
     res.status(406).send(Errors.comment.missingValue);
     return;
   }
 
   try {
-    const updatedPost = Post.createComment(_postId, { content, author });
+    const updatedPost = Post.createComment(_postId, {
+      content,
+      author: req.user._id,
+    });
     res.send(updatedPost);
   } catch (error) {
     console.error(error);

@@ -66,8 +66,9 @@ const Post = {
     return foundPosts;
   },
   findById: async (_id) => {
-    // TODO: aggregate comments author
-    const foundPost = await postCollection.findOne({ _id });
+    const foundPost = await postCollection
+      .findOne({ _id })
+      .populate("comments.author");
     return foundPost;
   },
   createComment: async (_id, newComment) => {
