@@ -35,7 +35,7 @@ function Home(props) {
       <AuthContext.Consumer>
         {(auth) => (
           <div className={classes.titleContent}>
-            <Typography variant="h4">Latests Blogs</Typography>
+            <Typography variant="h4">Latests Posts</Typography>
             {auth.user && auth.user.isOwner && (
               <>
                 <IconButton
