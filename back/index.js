@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const jwt = require("express-jwt");
+const cors = require("cors");
 
 const { DATABASE_URL, PORT, JWT } = require("./config");
 const Errors = require("./utils/errors");
@@ -13,8 +14,8 @@ const commentRoutes = require("./routes/comment");
 
 const app = express();
 
-const jsonParser = bodyParser.json();
-app.use(jsonParser);
+app.use(cors());
+app.use(bodyParser.json());
 
 app.use(
   jwt({
