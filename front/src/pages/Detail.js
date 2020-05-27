@@ -9,6 +9,7 @@ import { useRequest, deleteR } from "../hooks/useRequest";
 import EditPost from "../pages/CreatePost";
 import Comment from "../views/Comment";
 import CreateComment from "../views/CreateComment";
+import Markdown from "../views/Markdown";
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -107,7 +108,9 @@ function Detail(props) {
           </Typography>
         </div>
       </div>
-      <Paper className={classes.contentContainer}>{post.content}</Paper>
+      <Paper className={classes.contentContainer}>
+        <Markdown>{post.content}</Markdown>
+      </Paper>
       <Typography variant="h5" className={classes.titleComments}>
         Comments
       </Typography>

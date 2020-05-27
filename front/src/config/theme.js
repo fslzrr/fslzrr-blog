@@ -14,6 +14,9 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: ["Lato", "sans-serif"].join(","),
   },
+  shape: {
+    borderRadius: 0,
+  },
 });
 
 export default theme;

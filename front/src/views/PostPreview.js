@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
-import { Typography, Paper, makeStyles } from "@material-ui/core";
+import { Typography, Paper, makeStyles, Button } from "@material-ui/core";
+import Markdown from "./Markdown";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -8,7 +9,9 @@ const useStyles = makeStyles((theme) => ({
     transition: "all 0.2s",
     "&:hover": {
       transform: "scale(1.01)",
-      cursor: "pointer",
+    },
+    "&:hover .post-title": {
+      color: theme.palette.secondary.main,
     },
   },
   header: {
@@ -26,12 +29,30 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "unset",
     fontSize: "0.5rem",
   },
-  contentText: {
+  markdownWrapper: {
+    position: "relative",
     overflow: "hidden",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
-    lineClamp: 5 /* number of lines to show */,
-    boxOrient: "vertical",
+    maxHeight: 400,
+    "&::after": {
+      content: '" "',
+      display: "block",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      height: "100%",
+      width: "100%",
+      background: "linear-gradient(to bottom, transparent 50%, white 100%)",
+    },
+  },
+  readMoreButton: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
+    transition: "all 0.2s",
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
   },
 }));
 
@@ -41,9 +62,11 @@ function PostPreview(props) {
 
   const classes = useStyles();
   return (
-    <Paper onClick={props.onClick} className={classes.root}>
+    <Paper className={classes.root}>
       <div className={classes.header}>
-        <Typography variant="h5">{title}</Typography>
+        <Typography variant="h4" className="post-title">
+          {title}
+        </Typography>
         <div className={classes.dateContainer}>
           <Typography variant="overline" className={classes.dateText}>
             {date.format("DD/MM/YYYY")}
@@ -53,7 +76,17 @@ function PostPreview(props) {
           </Typography>
         </div>
       </div>
-      <Typography className={classes.contentText}>{content}</Typography>
+      <div className={classes.markdownWrapper}>
+        <Button
+          variant="contained"
+          color="secondary"
+          className={classes.readMoreButton}
+          onClick={props.onClick}
+        >
+          Read More
+        </Button>
+        <Markdown>{content}</Markdown>
+      </div>
     </Paper>
   );
 }
