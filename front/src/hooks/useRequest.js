@@ -25,13 +25,13 @@ const useRequest = (verb, path, params = {}, data = {}) => {
   return [response, requestAgain];
 };
 
-const post = async (path, params = {}, data = {}) =>
-  await axios.post(API_URL + path, data, { params });
+const post = async (path, params = {}, data = {}, opts = {}) =>
+  await axios.post(API_URL + path, data, { params, ...opts });
 
-const put = async (path, params = {}, data = {}) =>
-  await axios.put(API_URL + path, data, { params });
+const put = async (path, params = {}, data = {}, opts = {}) =>
+  await axios.put(API_URL + path, data, { params, ...opts });
 
-const deleteR = async (path, params = {}) =>
-  await axios.delete(API_URL + path, { params });
+const deleteR = async (path, params = {}, opts = {}) =>
+  await axios.delete(API_URL + path, { params, ...opts });
 
 export { useRequest, post, put, deleteR };

@@ -8,6 +8,7 @@ import AuthContext from "../contexts/authContext";
 import { useRequest, deleteR } from "../hooks/useRequest";
 import EditPost from "../pages/CreatePost";
 import Comment from "../views/Comment";
+import CreateComment from "../views/CreateComment";
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -32,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 16,
   },
   titleComments: {
+    marginBottom: 16,
+  },
+  comment: {
     marginBottom: 16,
   },
 }));
@@ -114,10 +118,26 @@ function Detail(props) {
       )}
       {post.comments.length > 0 &&
         post.comments.map((comment) => (
-          <div key={comment._id}>
-            <Comment comment={comment}></Comment>
+          <div key={comment._id} className={classes.comment}>
+            <Comment
+              comment={comment}
+              _postId={post._id}
+              onDeletedComment={requestAgain}
+            ></Comment>
           </div>
         ))}
+      <AuthContext.Consumer>
+        {(auth) => {
+          return (
+            auth.user && (
+              <CreateComment
+                _postId={post._id}
+                onCreatedComment={requestAgain}
+              ></CreateComment>
+            )
+          );
+        }}
+      </AuthContext.Consumer>
     </>
   );
 }

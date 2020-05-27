@@ -1,6 +1,9 @@
 import React from "react";
 import moment from "moment";
-import { Typography, makeStyles, Paper } from "@material-ui/core";
+import { Typography, makeStyles, Paper, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { deleteR } from "../hooks/useRequest";
+import AuthContext from "../contexts/authContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,19 +14,50 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
 }));
 
 function Comment(props) {
-  const { author, content, createdDate } = props.comment;
+  const { _id, author, content, createdDate } = props.comment;
+
+  const onDeleteComment = (token, _commentId) => async () => {
+    await deleteR(
+      `/comment/${props._postId}/${_commentId}`,
+      {},
+      { headers: { Authorization: token } }
+    );
+    props.onDeletedComment();
+  };
+
   const date = moment(createdDate);
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
       <div className={classes.titleContainer}>
         <Typography>{author.name}</Typography>
-        <Typography variant="overline" color="textSecondary">
-          {date.format("DD/MM/YYYY hh:mm a")}
-        </Typography>
+        <AuthContext.Consumer>
+          {(auth) => (
+            <div className={classes.buttonContainer}>
+              <Typography variant="overline" color="textSecondary">
+                {date.format("DD/MM/YYYY hh:mm a")}
+              </Typography>
+              {auth.user &&
+                (auth.user.isOwner || author._id === auth.user._id) && (
+                  <IconButton
+                    color="secondary"
+                    aria-label="delete"
+                    onClick={onDeleteComment(auth.token, _id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
+            </div>
+          )}
+        </AuthContext.Consumer>
       </div>
       <Typography color="textSecondary">{content}</Typography>
     </Paper>
