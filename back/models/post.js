@@ -70,6 +70,13 @@ const Post = {
     const foundPost = await postCollection.findOne({ _id });
     return foundPost;
   },
+  createComment: async (_id, newComment) => {
+    const post = postCollection.updateOne(
+      { _id },
+      { $push: { comments: newComment } }
+    );
+    return post;
+  },
 };
 
 module.exports = Post;

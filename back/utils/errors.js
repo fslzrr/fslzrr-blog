@@ -13,6 +13,9 @@ const Errors = {
   post: {
     missingValue: "Fields: title and content can't be empty.",
   },
+  comment: {
+    missingValue: "Field: content can't be empty.",
+  },
 };
 
 module.exports = Errors;

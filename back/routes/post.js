@@ -12,13 +12,13 @@ router
       res.send(posts);
     } catch (error) {
       console.error(error);
-      res.status(404).send(Errors.generic.default);
+      res.status(406).send(Errors.generic.default);
     }
   })
   .post(async (req, res) => {
     const { title, content } = req.body;
     if (!title || !content) {
-      res.status(404).send(Errors.post.missingValue);
+      res.status(406).send(Errors.post.missingValue);
       return;
     }
 
@@ -30,7 +30,7 @@ router
       res.send(newPost);
     } catch (error) {
       console.error(error);
-      res.status(404).send(Errors.generic.default);
+      res.status(406).send(Errors.generic.default);
     }
   });
 
@@ -43,7 +43,7 @@ router
       res.send(post);
     } catch (error) {
       console.error(error);
-      res.status(404).send(Errors.generic.default);
+      res.status(406).send(Errors.generic.default);
     }
   })
   .put(async (req, res) => {
@@ -51,7 +51,7 @@ router
     const { _id } = req.params;
 
     if (!title || !content) {
-      res.status(404).send(Errors.post.missingValue);
+      res.status(406).send(Errors.post.missingValue);
       return;
     }
 
@@ -64,7 +64,7 @@ router
       res.send(updatedPost);
     } catch (error) {
       console.error(error);
-      res.status(404).send(Errors.generic.default);
+      res.status(406).send(Errors.generic.default);
     }
   })
   .delete(async (req, res) => {
@@ -75,7 +75,7 @@ router
       res.send(deletedPost);
     } catch (error) {
       console.error(error);
-      res.status(404).send(Errors.generic.default);
+      res.status(406).send(Errors.generic.default);
     }
   });
 

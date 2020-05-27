@@ -8,18 +8,18 @@ const router = express.Router();
 router.route("/login").post(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(404).send(Errors.auth.missingValue);
+    res.status(406).send(Errors.auth.missingValue);
     return;
   }
 
   try {
     const user = await User.findByEmail(email);
     if (!user) {
-      res.status(404).send(Errors.auth.userNotFound);
+      res.status(406).send(Errors.auth.userNotFound);
       return;
     }
     if (user.password !== password) {
-      res.status(404).send(Errors.auth.incorrectPassword);
+      res.status(406).send(Errors.auth.incorrectPassword);
       return;
     }
 
@@ -27,7 +27,7 @@ router.route("/login").post(async (req, res) => {
     res.send({ token, user });
   } catch (error) {
     console.error(error);
-    res.status(404).send(Errors.generic.default);
+    res.status(406).send(Errors.generic.default);
   }
 });
 

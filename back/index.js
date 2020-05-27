@@ -6,6 +6,7 @@ const { DATABASE_URL, PORT } = require("./config");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
+const commentRoutes = require("./routes/comment");
 
 const app = express();
 
@@ -32,3 +33,4 @@ app.listen(PORT, async () => {
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
