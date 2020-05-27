@@ -20,7 +20,7 @@ const useRequest = (verb, path, params = {}, data = {}) => {
     fetchData();
   }, []);
 
-  return response;
+  return [response, setResponse];
 };
 
 const post = async (path, params = {}, data = {}) =>

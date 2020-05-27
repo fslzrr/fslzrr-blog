@@ -17,9 +17,6 @@ import Account from "./views/Account";
 import AuthContext from "./contexts/authContext";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -87,7 +84,7 @@ function App() {
         <Toolbar>
           <CodeIcon className={classes.icon} />
           <Typography variant="h6" className={classes.title}>
-            fslzrr's blog
+            Fslzrr's Blog
           </Typography>
           <IconButton
             edge="start"

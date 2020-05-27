@@ -8,6 +8,7 @@ import AuthContext from "../contexts/authContext";
 const useStyles = makeStyles((theme) => ({
   popover: {
     padding: "8px 16px 16px 16px",
+    width: 200,
     maxWidth: 200,
   },
 }));

@@ -1,10 +1,15 @@
-import React from "react";
-import { makeStyles, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import { makeStyles, Typography, IconButton } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import { useRequest } from "../hooks/useRequest";
+import AuthContext from "../contexts/authContext";
 import PostPreview from "../views/PostPreview";
+import CreatePost from "./CreatePost";
 
 const useStyles = makeStyles((theme) => ({
-  title: {
+  titleContent: {
+    display: "flex",
+    alignItem: "center",
     marginBottom: 16,
     color: "white",
   },
@@ -17,14 +22,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home(props) {
-  const posts = useRequest("get", "/post");
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const onCreatePostOpen = () => setIsCreatePostOpen(true);
+  const onCreatePostClose = () => setIsCreatePostOpen(false);
+
+  const [posts, setPosts] = useRequest("get", "/post");
+  const onCreated = (newPost) => setPosts([newPost, ...posts]);
 
   const classes = useStyles();
   return (
     <>
-      <Typography variant="h4" className={classes.title}>
-        Latests Blogs
-      </Typography>
+      <AuthContext.Consumer>
+        {(auth) => (
+          <div className={classes.titleContent}>
+            <Typography variant="h4">Latests Blogs</Typography>
+            {auth.user && auth.user.isOwner && (
+              <>
+                <IconButton
+                  color="secondary"
+                  aria-label="back"
+                  className={classes.add}
+                  onClick={onCreatePostOpen}
+                >
+                  <AddIcon />
+                </IconButton>
+                <CreatePost
+                  isOpen={isCreatePostOpen}
+                  onClose={onCreatePostClose}
+                  onCreated={onCreated}
+                ></CreatePost>
+              </>
+            )}
+          </div>
+        )}
+      </AuthContext.Consumer>
       <div>
         {!posts && <p>loading...</p>}
         {posts &&
