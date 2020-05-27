@@ -3,7 +3,12 @@ const Config = require("../config");
 
 function generateAuthToken(user) {
   return jwt.sign(
-    { id: user._id, name: user.name, email: user.email },
+    {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isOwner: user.isOwner,
+    },
     Config.JWT.secret
   );
 }

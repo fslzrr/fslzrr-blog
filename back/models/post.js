@@ -77,6 +77,16 @@ const Post = {
     );
     return post;
   },
+  deleteComment: async (_id, _commentId, _authorId, isOwner) => {
+    const commentQuery = isOwner
+      ? { _id: _commentId }
+      : { _id: _commentId, author: _authorId };
+    const post = postCollection.updateOne(
+      { _id },
+      { $pull: { comments: commentQuery } }
+    );
+    return post;
+  },
 };
 
 module.exports = Post;

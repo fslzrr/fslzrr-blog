@@ -1,6 +1,7 @@
 const Errors = {
   generic: {
     default: "Something went wrong.",
+    unauthorized: "You're unauthorized.",
   },
   auth: {
     missingValue: "Filds: email and password can't be empty.",

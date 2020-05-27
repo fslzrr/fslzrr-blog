@@ -1,7 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const { DATABASE_URL, PORT } = require("./config");
+const jwt = require("express-jwt");
+
+const { DATABASE_URL, PORT, JWT } = require("./config");
+const Errors = require("./utils/errors");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
@@ -12,6 +15,21 @@ const app = express();
 
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
+
+app.use(
+  jwt({
+    secret: JWT.secret,
+    credentialsRequired: JWT.credentialsRequired,
+  }).unless({
+    path: JWT.usecurePaths,
+  })
+);
+
+app.use((err, req, res, next) => {
+  if (err.name === "UnauthorizedError") {
+    res.status(406).send(Errors.generic.unauthorized);
+  }
+});
 
 app.listen(PORT, async () => {
   console.log(`server running on port: ${PORT}`);

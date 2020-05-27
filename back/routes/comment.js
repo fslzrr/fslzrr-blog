@@ -13,8 +13,26 @@ router.route("/:_postId").post(async (req, res) => {
   }
 
   try {
-    const createdComment = Post.createComment(_postId, { content, author });
-    res.send(createdComment);
+    const updatedPost = Post.createComment(_postId, { content, author });
+    res.send(updatedPost);
+  } catch (error) {
+    console.error(error);
+    res.status(406).send(Errors.generic.default);
+  }
+});
+
+router.route("/:_postId/:_id").delete(async (req, res) => {
+  const { _postId, _id } = req.params;
+  const { user } = req;
+
+  try {
+    const updatedPost = await Post.deleteComment(
+      _postId,
+      _id,
+      user._id,
+      user.isOwner
+    );
+    res.send(updatedPost);
   } catch (error) {
     console.error(error);
     res.status(406).send(Errors.generic.default);
