@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
     marginBottom: 8,
   },
   dateContainer: {
@@ -47,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   readMoreButton: {
     position: "absolute",
     right: 0,
-    bottom: 0,
+    top: 0,
     zIndex: 1,
     transition: "all 0.2s",
     "&:hover": {
@@ -57,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PostPreview(props) {
-  const { title, content, updatedDate } = props.post;
+  const { title, content, updatedDate, author } = props.post;
   const date = moment(updatedDate);
 
   const classes = useStyles();
@@ -67,14 +64,18 @@ function PostPreview(props) {
         <Typography variant="h4" className="post-title">
           {title}
         </Typography>
-        <div className={classes.dateContainer}>
-          <Typography variant="overline" className={classes.dateText}>
+        <div className={classes.info}>
+          <Typography variant="caption">{author.name}</Typography>
+          <span> - </span>
+          <Typography variant="caption" className={classes.dateText}>
             {date.format("DD/MM/YYYY")}
           </Typography>
-          <Typography variant="overline" className={classes.dateText}>
-            {date.format("hh:mm a")}
+          <Typography variant="caption" className={classes.dateText}>
+            {date.format("hh:mm A")}
           </Typography>
         </div>
+
+        <div></div>
       </div>
       <div className={classes.markdownWrapper}>
         <Button

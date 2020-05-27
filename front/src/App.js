@@ -102,8 +102,12 @@ function App() {
       </Menu>
       <div className={classes.heroImage}></div>
       <div className={classes.container}>
-        {!postId && <PageHome onPostClick={onPostClick}></PageHome>}
-        {postId && <PageDetail _id={postId} onBack={onBack}></PageDetail>}
+        {!postId && (
+          <PageHome token={token} onPostClick={onPostClick}></PageHome>
+        )}
+        {postId && (
+          <PageDetail _id={postId} token={token} onBack={onBack}></PageDetail>
+        )}
       </div>
     </AuthContext.Provider>
   );

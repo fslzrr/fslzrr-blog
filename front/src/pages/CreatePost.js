@@ -9,6 +9,8 @@ import {
   makeStyles,
   IconButton,
   TextField,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { post as postRequest, put as putRequest } from "../hooks/useRequest";
@@ -43,12 +45,18 @@ function CreatePost(props) {
 
   const [title, setTitle] = useState(post ? post.title : "");
   const [content, setContent] = useState(post ? post.content : "");
+  const [isPublic, setIsPublic] = useState(post ? post.isPublic : false);
 
   const onValueChange = (set) => (event) => set(event.target.value.trim());
 
   const createPost = async () => {
     if (title.trim() === "" || content.trim() === "") return;
-    await postRequest("/post", {}, { title, content });
+    await postRequest(
+      "/post",
+      {},
+      { title, content, isPublic },
+      { headers: { Authorization: props.token } }
+    );
     onClose();
     onCreated();
   };
@@ -62,10 +70,10 @@ function CreatePost(props) {
   };
 
   const fixPost = async () =>
-    await updatePost({ title, content, isUpdating: false });
+    await updatePost({ title, content, isPublic, isUpdating: false });
 
   const improvePost = async () =>
-    await updatePost({ title, content, isUpdating: true });
+    await updatePost({ title, content, isPublic, isUpdating: true });
 
   const classes = useStyles();
   return (
@@ -118,6 +126,7 @@ function CreatePost(props) {
       </AppBar>
       <div className={classes.container}>
         <Typography variant="h4">Let's Start!</Typography>
+
         <TextField
           fullWidth
           margin="dense"
@@ -125,6 +134,16 @@ function CreatePost(props) {
           label="Title"
           defaultValue={post ? post.title : undefined}
           onChange={onValueChange(setTitle)}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isPublic}
+              onChange={() => setIsPublic(!isPublic)}
+              inputProps={{ "aria-label": "is public" }}
+            />
+          }
+          label="Is Public"
         />
         <TextField
           autoFocus

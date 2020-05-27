@@ -38,6 +38,15 @@ const postSchema = mongoose.Schema({
       },
     },
   ],
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
+  isPublic: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const postCollection = mongoose.model("post", postSchema);
@@ -61,14 +70,15 @@ const Post = {
   findAll: async () => {
     const foundPosts = await postCollection
       .find()
-      .select("_id title content updatedDate")
+      .select("_id title content updatedDate author")
+      .populate("author")
       .sort({ updatedDate: "desc" });
     return foundPosts;
   },
   findById: async (_id) => {
     const foundPost = await postCollection
       .findOne({ _id })
-      .populate("comments.author");
+      .populate("author comments.author");
     return foundPost;
   },
   createComment: async (_id, newComment) => {

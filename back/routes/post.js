@@ -16,8 +16,9 @@ router
     }
   })
   .post(async (req, res) => {
-    const { title, content } = req.body;
-    if (!title || !content) {
+    const { title, content, isPublic } = req.body;
+    const { user } = req;
+    if (!title || !content || isPublic === undefined) {
       res.status(406).send(Errors.post.missingValue);
       return;
     }
@@ -26,6 +27,8 @@ router
       const newPost = await Post.create({
         title,
         content,
+        isPublic,
+        author: user._id,
       });
       res.send(newPost);
     } catch (error) {
@@ -55,9 +58,10 @@ router
       return;
     }
 
+    const base = { _id, title, content };
     const postToUpdate = isUpdating
-      ? { _id, title, content, updatedDate: Date.now() }
-      : { _id, title, content };
+      ? { ...base, updatedDate: Date.now() }
+      : { ...base };
 
     try {
       const updatedPost = await Post.update(postToUpdate);

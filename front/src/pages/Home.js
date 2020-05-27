@@ -26,7 +26,13 @@ function Home(props) {
   const onCreatePostOpen = () => setIsCreatePostOpen(true);
   const onCreatePostClose = () => setIsCreatePostOpen(false);
 
-  const [posts, requestAgain] = useRequest("get", "/post");
+  const [posts, requestAgain] = useRequest(
+    "get",
+    "/post",
+    {},
+    {},
+    { headers: { Authorization: props.token } }
+  );
 
   const classes = useStyles();
   return (
@@ -35,7 +41,7 @@ function Home(props) {
         {(auth) => (
           <div className={classes.titleContent}>
             <Typography variant="h4">Latests Posts</Typography>
-            {auth.user && auth.user.isOwner && (
+            {auth.user && (
               <>
                 <IconButton
                   color="secondary"
@@ -48,6 +54,7 @@ function Home(props) {
                   isOpen={isCreatePostOpen}
                   onClose={onCreatePostClose}
                   onCreated={requestAgain}
+                  token={auth.token}
                 ></CreatePost>
               </>
             )}

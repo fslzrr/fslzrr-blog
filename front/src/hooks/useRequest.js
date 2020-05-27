@@ -4,7 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:8080";
 const headers = { "Access-Control-Allow-Origin": "*" };
 
-const useRequest = (verb, path, params = {}, data = {}) => {
+const useRequest = (verb, path, params = {}, data = {}, opts = {}) => {
   const [response, setResponse] = useState(null);
   const [counter, setCounter] = useState(0);
 
@@ -15,6 +15,7 @@ const useRequest = (verb, path, params = {}, data = {}) => {
         params,
         data,
         headers,
+        ...opts,
       });
       setResponse(response.data);
     }

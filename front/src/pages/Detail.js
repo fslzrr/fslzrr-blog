@@ -49,7 +49,13 @@ function Detail(props) {
   const onEditPostOpen = () => setIsEditPostOpen(true);
   const onEditPostClose = () => setIsEditPostOpen(false);
 
-  const [post, requestAgain] = useRequest("get", `/post/${props._id}`);
+  const [post, requestAgain] = useRequest(
+    "get",
+    `/post/${props._id}`,
+    {},
+    {},
+    { headers: { Authorization: props.token } }
+  );
 
   const onDeletePost = async () => {
     await deleteR(`/post/${post._id}`);
@@ -76,7 +82,7 @@ function Detail(props) {
             {(auth) => (
               <div className={classes.titileButtonsContainer}>
                 <Typography variant="h4">{post.title}</Typography>
-                {auth.user && auth.user.isOwner && (
+                {auth.user && auth.user._id === post.author._id && (
                   <>
                     <IconButton
                       color="secondary"
