@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { Typography, IconButton, makeStyles, Paper } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { useRequest } from "../hooks/useRequest";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import AuthContext from "../contexts/authContext";
+import { useRequest, deleteR } from "../hooks/useRequest";
+import EditPost from "../pages/CreatePost";
 import Comment from "../views/Comment";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
   },
   titleTextContainer: {
     color: "white",
+  },
+  titileButtonsContainer: {
+    display: "flex",
+    alignItems: "center",
   },
   date: {
     lineHeight: "unset",
@@ -29,7 +37,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Detail(props) {
-  const [post] = useRequest("get", `/post/${props._id}`);
+  const [isEditPostOpen, setIsEditPostOpen] = useState(false);
+  const onEditPostOpen = () => setIsEditPostOpen(true);
+  const onEditPostClose = () => setIsEditPostOpen(false);
+
+  const [post, requestAgain] = useRequest("get", `/post/${props._id}`);
+
+  const onDeletePost = async () => {
+    await deleteR(`/post/${post._id}`);
+    props.onBack();
+  };
 
   const classes = useStyles();
   if (!post) return <></>;
@@ -47,7 +64,37 @@ function Detail(props) {
           <ArrowBackIcon />
         </IconButton>
         <div className={classes.titleTextContainer}>
-          <Typography variant="h4">{post.title}</Typography>
+          <AuthContext.Consumer>
+            {(auth) => (
+              <div className={classes.titileButtonsContainer}>
+                <Typography variant="h4">{post.title}</Typography>
+                {auth.user && auth.user.isOwner && (
+                  <>
+                    <IconButton
+                      color="secondary"
+                      aria-label="edit"
+                      onClick={onEditPostOpen}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      aria-label="delete"
+                      onClick={onDeletePost}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <EditPost
+                      post={post}
+                      isOpen={isEditPostOpen}
+                      onClose={onEditPostClose}
+                      onUpdated={requestAgain}
+                    ></EditPost>
+                  </>
+                )}
+              </div>
+            )}
+          </AuthContext.Consumer>
           <Typography variant="caption" className={classes.date}>
             Last Updated - {date.format("DD/MM/YYYY hh:mm A")}
           </Typography>

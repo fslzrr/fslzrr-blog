@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { post } from "../hooks/useRequest";
+import { post as postRequest, put as putRequest } from "../hooks/useRequest";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,19 +39,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CreatePost(props) {
-  const { isOpen, onClose, onCreated } = props;
+  const { post, isOpen, onClose, onCreated, onUpdated } = props;
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState(post ? post.title : "");
+  const [content, setContent] = useState(post ? post.content : "");
 
   const onValueChange = (set) => (event) => set(event.target.value.trim());
 
   const createPost = async () => {
     if (title.trim() === "" || content.trim() === "") return;
+    await postRequest("/post", {}, { title, content });
     onClose();
-    const res = await post("/post", {}, { title, content });
-    onCreated(res.data);
+    onCreated();
   };
+
+  const updatePost = async (body) => {
+    if (body.title.trim() === "" || body.content.trim() === "") return;
+    if (body.title === post.title && body.content === post.content) return;
+    await putRequest(`/post/${post._id}`, {}, body);
+    onClose();
+    onUpdated();
+  };
+
+  const fixPost = async () =>
+    await updatePost({ title, content, isUpdating: false });
+
+  const improvePost = async () =>
+    await updatePost({ title, content, isUpdating: true });
 
   const classes = useStyles();
   return (
@@ -69,14 +83,37 @@ function CreatePost(props) {
           <Typography variant="h6" className={classes.title}>
             Writing New Post
           </Typography>
-          <Button
-            disableElevation
-            variant="contained"
-            color="primary"
-            onClick={createPost}
-          >
-            Save & Publish
-          </Button>
+          {!post && (
+            <Button
+              disableElevation
+              variant="contained"
+              color="primary"
+              onClick={createPost}
+            >
+              Save & Publish
+            </Button>
+          )}
+          {post && (
+            <>
+              <Button
+                disableElevation
+                variant="contained"
+                color="primary"
+                onClick={fixPost}
+              >
+                Edit & Publish
+              </Button>
+              <p>&emsp;</p>
+              <Button
+                disableElevation
+                variant="contained"
+                color="primary"
+                onClick={improvePost}
+              >
+                Update & Publish
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <div className={classes.container}>
@@ -86,6 +123,7 @@ function CreatePost(props) {
           margin="dense"
           id="title"
           label="Title"
+          defaultValue={post ? post.title : undefined}
           onChange={onValueChange(setTitle)}
         />
         <TextField
@@ -95,6 +133,7 @@ function CreatePost(props) {
           margin="dense"
           id="content"
           label="Content"
+          defaultValue={post ? post.content : undefined}
           onChange={onValueChange(setContent)}
         />
       </div>

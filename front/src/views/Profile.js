@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, TextField, Button } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 
 function Profile(props) {
   const logout = async () => {

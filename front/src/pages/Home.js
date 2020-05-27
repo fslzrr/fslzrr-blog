@@ -26,8 +26,7 @@ function Home(props) {
   const onCreatePostOpen = () => setIsCreatePostOpen(true);
   const onCreatePostClose = () => setIsCreatePostOpen(false);
 
-  const [posts, setPosts] = useRequest("get", "/post");
-  const onCreated = (newPost) => setPosts([newPost, ...posts]);
+  const [posts, requestAgain] = useRequest("get", "/post");
 
   const classes = useStyles();
   return (
@@ -40,8 +39,7 @@ function Home(props) {
               <>
                 <IconButton
                   color="secondary"
-                  aria-label="back"
-                  className={classes.add}
+                  aria-label="add"
                   onClick={onCreatePostOpen}
                 >
                   <AddIcon />
@@ -49,7 +47,7 @@ function Home(props) {
                 <CreatePost
                   isOpen={isCreatePostOpen}
                   onClose={onCreatePostClose}
-                  onCreated={onCreated}
+                  onCreated={requestAgain}
                 ></CreatePost>
               </>
             )}
