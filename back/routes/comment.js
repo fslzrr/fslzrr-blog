@@ -13,7 +13,7 @@ router.route("/:_postId").post(async (req, res) => {
   }
 
   try {
-    const updatedPost = Post.createComment(_postId, {
+    const updatedPost = await Post.createComment(_postId, {
       content,
       author: req.user._id,
     });
