@@ -7,7 +7,7 @@ const CONFIG = {
   JWT: {
     credentialsRequired: true,
     secret: process.env.SECRET || "why-so-serioussss",
-    usecurePaths: ["/", "/user", "/auth/login"],
+    usecurePaths: ["*", "/user", "/auth/login"],
   },
 };
 
