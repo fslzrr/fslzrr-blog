@@ -56,7 +56,7 @@ router
     }
   })
   .put(async (req, res) => {
-    const { title, content, isUpdating } = req.body;
+    const { title, content, isUpdating, isPublic } = req.body;
     const { _id } = req.params;
 
     if (!title || !content) {
@@ -64,7 +64,7 @@ router
       return;
     }
 
-    const base = { _id, title, content };
+    const base = { _id, title, content, isPublic };
     const postToUpdate = isUpdating
       ? { ...base, updatedDate: Date.now() }
       : { ...base };
