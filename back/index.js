@@ -59,6 +59,6 @@ app.use("/friend", friendRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 
-app.get("*", (req, res) => {
+app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
