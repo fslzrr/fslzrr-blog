@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon -r dotenv/config index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fernando Salazar <fslzrr@gmail.com>",
@@ -20,6 +20,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "dotenv": "^8.2.0"
   }
 }
