@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const jwt = require("express-jwt");
@@ -14,6 +15,8 @@ const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, "build")));
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -55,3 +58,7 @@ app.use("/user", userRoutes);
 app.use("/friend", friendRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
