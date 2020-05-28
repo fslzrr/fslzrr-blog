@@ -42,41 +42,49 @@ function Friends(props) {
           {isViewingFriends ? "Friends" : "Friend Requests"}
         </Typography>
         <List>
-          {listToUse.map((user) => (
-            <ListItem key={user._id} className={classes.listItemRoot}>
-              <ListItemText primary={user.name} secondary={user.email} />
-              <ListItemSecondaryAction>
-                {isViewingFriends && (
-                  <IconButton
-                    edge="end"
-                    aria-label="remove friend"
-                    onClick={onRemoveFriend(user._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-                {!isViewingFriends && (
-                  <>
+          {listToUse.length === 0 && (
+            <Typography>
+              {isViewingFriends
+                ? "You suck and don't have any friends :D"
+                : "Nobody want's to be your friend... yet :)"}
+            </Typography>
+          )}
+          {listToUse.length > 0 &&
+            listToUse.map((user) => (
+              <ListItem key={user._id} className={classes.listItemRoot}>
+                <ListItemText primary={user.name} secondary={user.email} />
+                <ListItemSecondaryAction>
+                  {isViewingFriends && (
                     <IconButton
-                      edge="start"
-                      aria-label="decline friend request"
-                      onClick={onDeclineRequest(user._id)}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                    <IconButton
-                      color="primary"
                       edge="end"
-                      aria-label="accept friend request"
-                      onClick={onAcceptRequest(user._id)}
+                      aria-label="remove friend"
+                      onClick={onRemoveFriend(user._id)}
                     >
-                      <CheckIcon />
+                      <DeleteIcon />
                     </IconButton>
-                  </>
-                )}
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+                  )}
+                  {!isViewingFriends && (
+                    <>
+                      <IconButton
+                        edge="start"
+                        aria-label="decline friend request"
+                        onClick={onDeclineRequest(user._id)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        edge="end"
+                        aria-label="accept friend request"
+                        onClick={onAcceptRequest(user._id)}
+                      >
+                        <CheckIcon />
+                      </IconButton>
+                    </>
+                  )}
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
         </List>
       </DialogContent>
     </Dialog>
