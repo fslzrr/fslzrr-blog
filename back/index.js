@@ -36,7 +36,7 @@ app.use((req, next) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log("req: ", req);
+  console.log("req: ", req.baseUrl);
   if (err.name === "UnauthorizedError") {
     res.status(406).send(Errors.generic.unauthorized);
   }
