@@ -9,6 +9,7 @@ const Errors = require("./utils/errors");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const friendRoutes = require("./routes/friend");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
 
@@ -51,5 +52,6 @@ app.listen(PORT, async () => {
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/friend", friendRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);

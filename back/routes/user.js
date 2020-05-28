@@ -27,4 +27,22 @@ router.route("/").post(async (req, res) => {
   }
 });
 
+router.route("/:name").get(async (req, res) => {
+  const { name } = req.params;
+  const { _id } = req.user;
+
+  if (name === "<null>") {
+    res.send([]);
+    return;
+  }
+
+  try {
+    const users = await User.findAllByName(name, _id);
+    res.send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(406).send(Errors.generic.default);
+  }
+});
+
 module.exports = router;

@@ -143,7 +143,7 @@ function CreatePost(props) {
               inputProps={{ "aria-label": "is public" }}
             />
           }
-          label="Is Public"
+          label="Make Public"
         />
         <TextField
           autoFocus

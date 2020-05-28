@@ -9,12 +9,14 @@ import {
 } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./config/theme";
 import PageHome from "./pages/Home";
 import PageDetail from "./pages/Detail";
 import Account from "./views/Account";
 import AuthContext from "./contexts/authContext";
+import SearchUsers from "./views/SearchUsers";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -57,6 +59,10 @@ function App() {
     localStorage.removeItem("user");
   };
 
+  const [isUsersOpen, setIsUsersOpen] = useState(false);
+  const onUsersClose = () => setIsUsersOpen(false);
+  const onUsersOpen = () => setIsUsersOpen(true);
+
   const [postId, setPostId] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -91,12 +97,27 @@ function App() {
             color="inherit"
             aria-label="menu"
             ref={anchorEl}
+            onClick={onUsersOpen}
+          >
+            <GroupAddIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="menu"
+            ref={anchorEl}
             onClick={onProfileOpen}
           >
             <AccountCircleIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <SearchUsers
+        isOpen={isUsersOpen}
+        user={user}
+        setUser={setUser}
+        token={token}
+        onClose={onUsersClose}
+      ></SearchUsers>
       <Menu open={isProfileOpen} onClose={onProfileClose} anchorEl={anchorEl}>
         <Account></Account>
       </Menu>
