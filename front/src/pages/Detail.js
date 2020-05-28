@@ -151,29 +151,23 @@ function Detail(props) {
       <Typography variant="h5" className={classes.titleComments}>
         Comments
       </Typography>
-      {post.comments.length === 0 && (
-        <div className={classes.emptyComments}>
-          <Typography variant="caption">
-            Anyone has commented yet{" "}
-            <span role="img" aria-label="sad">
-              😞
-            </span>
-          </Typography>
-        </div>
-      )}
       <AuthContext.Consumer>
         {(auth) => (
           <>
             {post.comments.length > 0 &&
-              post.comments.map((comment) => (
-                <div key={comment._id} className={classes.comment}>
-                  <Comment
-                    comment={comment}
-                    _postId={post._id}
-                    onDeletedComment={requestAgain}
-                  ></Comment>
-                </div>
-              ))}
+              post.comments.map(
+                (comment) =>
+                  (comment.isApproved || post.author._id === auth.user._id) && (
+                    <div key={comment._id} className={classes.comment}>
+                      <Comment
+                        comment={comment}
+                        _postId={post._id}
+                        _postAuthorId={post.author._id}
+                        onDeletedComment={requestAgain}
+                      ></Comment>
+                    </div>
+                  )
+              )}
             {auth.user && (
               <CreateComment
                 _postId={post._id}

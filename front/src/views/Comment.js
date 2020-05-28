@@ -2,7 +2,8 @@ import React from "react";
 import moment from "moment";
 import { Typography, makeStyles, Paper, IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { deleteR } from "../hooks/useRequest";
+import CheckIcon from "@material-ui/icons/Check";
+import { deleteR, post } from "../hooks/useRequest";
 import AuthContext from "../contexts/authContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,11 +23,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Comment(props) {
-  const { _id, author, content, createdDate } = props.comment;
+  const { _id, author, content, createdDate, isApproved } = props.comment;
 
   const onDeleteComment = (token, _commentId) => async () => {
     await deleteR(
       `/comment/${props._postId}/${_commentId}`,
+      {},
+      { headers: { Authorization: token } }
+    );
+    props.onDeletedComment();
+  };
+
+  const onApproveComment = (token, _commentId) => async () => {
+    await post(
+      `/comment/${props._postId}/${_commentId}`,
+      {},
       {},
       { headers: { Authorization: token } }
     );
@@ -45,7 +56,17 @@ function Comment(props) {
               <Typography variant="overline" color="textSecondary">
                 {date.format("DD/MM/YYYY hh:mm a")}
               </Typography>
-              {author._id === auth.user._id && (
+              {!isApproved && props._postAuthorId === auth.user._id && (
+                <IconButton
+                  color="secondary"
+                  aria-label="delete"
+                  onClick={onApproveComment(auth.token, _id)}
+                >
+                  <CheckIcon />
+                </IconButton>
+              )}
+              {(author._id === auth.user._id ||
+                props._postAuthorId === auth.user._id) && (
                 <IconButton
                   color="secondary"
                   aria-label="delete"

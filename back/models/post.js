@@ -33,6 +33,10 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
       },
+      isApproved: {
+        type: Boolean,
+        default: false,
+      },
       createdDate: {
         type: Date,
         default: Date.now,
@@ -109,17 +113,22 @@ const Post = {
     return foundPost;
   },
   createComment: async (_id, newComment) => {
-    const post = postCollection.updateOne(
+    const post = await postCollection.updateOne(
       { _id },
       { $push: { comments: newComment } }
     );
     return post;
   },
-  deleteComment: async (_id, _commentId, _authorId, isOwner) => {
-    const commentQuery = isOwner
-      ? { _id: _commentId }
-      : { _id: _commentId, author: _authorId };
-    const post = postCollection.updateOne(
+  approveComment: async (_id, _commentId) => {
+    const post = await postCollection.updateOne(
+      { _id, comments: { $elemMatch: { _id: _commentId } } },
+      { $set: { "comments.$.isApproved": true } }
+    );
+    return post;
+  },
+  deleteComment: async (_id, _commentId) => {
+    const commentQuery = { _id: _commentId };
+    const post = await postCollection.updateOne(
       { _id },
       { $pull: { comments: commentQuery } }
     );
