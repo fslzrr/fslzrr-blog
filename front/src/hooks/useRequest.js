@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://obscure-chamber-16473.herokuapp.com:8080";
+const API_URL = "https://obscure-chamber-16473.herokuapp.com";
 const headers = { "Access-Control-Allow-Origin": "*" };
 
 const useRequest = (
