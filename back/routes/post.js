@@ -6,9 +6,10 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(async (_, res) => {
+  .get(async (req, res) => {
+    const { _id } = req.user;
     try {
-      const posts = await Post.findAll();
+      const posts = await Post.findAll(_id);
       res.send(posts);
     } catch (error) {
       console.error(error);

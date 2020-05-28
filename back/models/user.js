@@ -35,6 +35,10 @@ const User = {
       .populate("friends friendRequests");
     return me;
   },
+  findById: async (_id) => {
+    const me = await userCollection.findOne({ _id });
+    return me;
+  },
   findByEmail: async (email) => {
     const user = await userCollection.findOne({ email });
     return user;

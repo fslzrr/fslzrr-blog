@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 const postSchema = mongoose.Schema({
   title: {
@@ -67,9 +68,15 @@ const Post = {
     const deleted = await postCollection.findByIdAndDelete({ _id });
     return deleted;
   },
-  findAll: async () => {
+  findAll: async (_id) => {
+    const { friends } = await User.findById(_id);
     const foundPosts = await postCollection
-      .find()
+      .find({
+        $and: [
+          { $or: [{ isPublic: true }, { author: _id, isPublic: false }] },
+          { author: { $in: [...friends, _id] } },
+        ],
+      })
       .select("_id title content updatedDate author")
       .populate("author")
       .sort({ updatedDate: "desc" });
