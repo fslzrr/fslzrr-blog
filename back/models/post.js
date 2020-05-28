@@ -68,19 +68,36 @@ const Post = {
     const deleted = await postCollection.findByIdAndDelete({ _id });
     return deleted;
   },
-  findAll: async (_id) => {
+  findAll: async (_id, query) => {
+    const sort =
+      query.orderBy === "latest" ? { updatedDate: "desc" } : { claps: "desc" };
+
+    const title = query.title
+      ? [{ title: { $regex: query.title, $options: "i" } }]
+      : [];
+
+    const author = query.name ? [] : [];
+
     const { friends } = await User.findById(_id);
     const foundPosts = await postCollection
       .find({
         $and: [
           { $or: [{ isPublic: true }, { author: _id, isPublic: false }] },
           { author: { $in: [...friends, _id] } },
+          ...[...title, ...author],
         ],
       })
       .select("_id title content updatedDate author")
       .populate("author")
-      .sort({ updatedDate: "desc" });
-    return foundPosts;
+      .sort(sort);
+
+    const filteredPosts = query.name
+      ? foundPosts.filter((post) =>
+          post.author.name.toLowerCase().includes(query.name.toLowerCase())
+        )
+      : foundPosts;
+
+    return filteredPosts;
   },
   findById: async (_id) => {
     const foundPost = await postCollection

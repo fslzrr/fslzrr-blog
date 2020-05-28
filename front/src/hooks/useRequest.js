@@ -12,18 +12,35 @@ const useRequest = (
   opts = {},
   callback = () => {}
 ) => {
+  const [innerData, setInnerData] = useState(data);
   const [response, setResponse] = useState(null);
   const [counter, setCounter] = useState(0);
 
-  const requestAgain = () => setCounter(counter + 1);
+  const requestAgain = (newData) => {
+    if (newData) setInnerData(newData);
+    setCounter(counter + 1);
+  };
+
   useEffect(() => {
+    const innerOpts =
+      verb === "get"
+        ? {
+            params,
+            innerData,
+            headers,
+            ...opts,
+          }
+        : {
+            params,
+            headers,
+            ...opts,
+          };
+
     async function fetchData() {
-      const response = await axios[verb](API_URL + path, {
-        params,
-        data,
-        headers,
-        ...opts,
-      });
+      const response =
+        verb === "get"
+          ? await axios[verb](API_URL + path, innerOpts)
+          : await axios[verb](API_URL + path, innerData, innerOpts);
       setResponse(response.data);
       callback(response.data);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { useRequest } from "../hooks/useRequest";
@@ -26,13 +26,13 @@ function Home(props) {
   const onCreatePostOpen = () => setIsCreatePostOpen(true);
   const onCreatePostClose = () => setIsCreatePostOpen(false);
 
-  const [posts, requestAgain] = useRequest(
-    "get",
-    "/post",
-    {},
-    {},
-    { headers: { Authorization: props.token } }
-  );
+  const [posts, requestAgain] = useRequest("put", "/post", {}, props.query, {
+    headers: { Authorization: props.token },
+  });
+
+  useEffect(() => {
+    if (posts) requestAgain(props.query);
+  }, [props.requestAgain]);
 
   const classes = useStyles();
   return (

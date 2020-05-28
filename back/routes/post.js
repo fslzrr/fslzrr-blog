@@ -6,10 +6,13 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(async (req, res) => {
+  .put(async (req, res) => {
     const { _id } = req.user;
     try {
-      const posts = await Post.findAll(_id);
+      const posts = await Post.findAll(
+        _id,
+        req.body === undefined ? { orderBy: "latest" } : req.body
+      );
       res.send(posts);
     } catch (error) {
       console.error(error);
