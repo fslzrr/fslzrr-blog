@@ -1,1 +1,1 @@
-web: cd front && npm i && npm run build && cd .. && cp -R ./front/build ./back/ && cd back && npm run start
+web: cd back && npm run start
