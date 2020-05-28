@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import moment from "moment";
-import { Typography, IconButton, makeStyles, Paper } from "@material-ui/core";
+import {
+  Typography,
+  IconButton,
+  makeStyles,
+  Paper,
+  Fab,
+} from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
 import AuthContext from "../contexts/authContext";
-import { useRequest, deleteR } from "../hooks/useRequest";
+import { useRequest, deleteR, post as postR } from "../hooks/useRequest";
 import EditPost from "../pages/CreatePost";
 import Comment from "../views/Comment";
 import CreateComment from "../views/CreateComment";
@@ -42,6 +49,16 @@ const useStyles = makeStyles((theme) => ({
   comment: {
     marginBottom: 16,
   },
+  fab: {
+    position: "fixed",
+    bottom: 16,
+    right: 16,
+    display: "flex",
+    alignItems: "center",
+    "& > *:first-child": {
+      marginRight: 16,
+    },
+  },
 }));
 
 function Detail(props) {
@@ -58,8 +75,22 @@ function Detail(props) {
   );
 
   const onDeletePost = async () => {
-    await deleteR(`/post/${post._id}`);
+    await deleteR(
+      `/post/${post._id}`,
+      {},
+      { headers: { Authorization: props.token } }
+    );
     props.onBack();
+  };
+
+  const onClap = async () => {
+    await postR(
+      `/post/${post._id}/clap`,
+      {},
+      {},
+      { headers: { Authorization: props.token } }
+    );
+    requestAgain();
   };
 
   const classes = useStyles();
@@ -152,6 +183,12 @@ function Detail(props) {
           );
         }}
       </AuthContext.Consumer>
+      <div className={classes.fab}>
+        <Typography>{post.claps}</Typography>
+        <Fab color="secondary" aria-label="hot" onClick={onClap}>
+          <WhatshotIcon></WhatshotIcon>
+        </Fab>
+      </div>
     </>
   );
 }

@@ -128,7 +128,7 @@ function App() {
       <AppBar position="static">
         <Toolbar>
           <CodeIcon className={classes.icon} />
-          {user && (
+          {user && !postId && (
             <>
               <div className={classes.searchContainer}>
                 <TextField
@@ -166,6 +166,22 @@ function App() {
                 <IconButton edge="end" aria-label="menu" onClick={onSearch}>
                   <SearchIcon />
                 </IconButton>
+              </div>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                ref={anchorEl}
+                onClick={onUsersOpen}
+              >
+                <GroupAddIcon />
+              </IconButton>
+            </>
+          )}
+          {user && postId && (
+            <>
+              <div className={classes.searchContainer}>
+                <Typography variant="h6">TechBlogs</Typography>
               </div>
               <IconButton
                 edge="start"
