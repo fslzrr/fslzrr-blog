@@ -41,6 +41,27 @@ const postSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      replies: [
+        {
+          author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "user",
+            required: true,
+          },
+          content: {
+            type: String,
+            required: true,
+          },
+          isApproved: {
+            type: Boolean,
+            default: false,
+          },
+          createdDate: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
     },
   ],
   author: {
@@ -109,7 +130,7 @@ const Post = {
   findById: async (_id) => {
     const foundPost = await postCollection
       .findOne({ _id })
-      .populate("author comments.author");
+      .populate("author comments.author comments.replies.author");
     return foundPost;
   },
   createComment: async (_id, newComment) => {
@@ -131,6 +152,31 @@ const Post = {
     const post = await postCollection.updateOne(
       { _id },
       { $pull: { comments: commentQuery } }
+    );
+    return post;
+  },
+  createSubcomment: async (_id, _commentId, newComment) => {
+    const post = await postCollection.updateOne(
+      { _id, comments: { $elemMatch: { _id: _commentId } } },
+      { $push: { "comments.$.replies": newComment } }
+    );
+    return post;
+  },
+  approveSubcomment: async (_id, _commentId, _subcommentId) => {
+    const post = await postCollection.updateOne(
+      {
+        _id,
+      },
+      { $set: { "comments.$[i].replies.$[j].isApproved": true } },
+      { arrayFilters: [{ "i._id": _commentId }, { "j._id": _subcommentId }] }
+    );
+    return post;
+  },
+  deleteSubcomment: async (_id, _commentId, _subcommentId) => {
+    const commentQuery = { _id: _subcommentId };
+    const post = await postCollection.updateOne(
+      { _id, comments: { $elemMatch: { _id: _commentId } } },
+      { $pull: { "comments.$.replies": commentQuery } }
     );
     return post;
   },

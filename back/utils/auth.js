@@ -7,7 +7,6 @@ function generateAuthToken(user) {
       _id: user._id,
       name: user.name,
       email: user.email,
-      isOwner: user.isOwner,
     },
     Config.JWT.secret
   );

@@ -14,10 +14,6 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  isOwner: {
-    type: Boolean,
-    default: false,
-  },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 });

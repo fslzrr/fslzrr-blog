@@ -63,8 +63,15 @@ function CreatePost(props) {
 
   const updatePost = async (body) => {
     if (body.title.trim() === "" || body.content.trim() === "") return;
-    if (body.title === post.title && body.content === post.content) return;
-    await putRequest(`/post/${post._id}`, {}, body);
+    if (
+      body.title === post.title &&
+      body.content === post.content &&
+      body.isPublic === post.isPublic
+    )
+      return;
+    await putRequest(`/post/${post._id}`, {}, body, {
+      headers: { Authorization: props.token },
+    });
     onClose();
     onUpdated();
   };

@@ -10,21 +10,23 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: "flex",
     justifyContent: "flex-end",
+    marginBottom: 16,
+  },
+  cancelButton: {
+    marginRight: 16,
   },
 }));
 
 function CreateComment(props) {
-  const { _postId, onCreatedComment } = props;
+  const { _postId, onCreatedComment, isSubcomment } = props;
   const [content, setContent] = useState("Great post!");
   const onChangeContent = (event) => setContent(event.target.value);
 
   const onCreate = (token) => async () => {
-    await post(
-      `/comment/${_postId}`,
-      {},
-      { content },
-      { headers: { Authorization: token } }
-    );
+    const url = isSubcomment
+      ? `/comment/${_postId}/${props._parentCommentId}`
+      : `/comment/${_postId}`;
+    await post(url, {}, { content }, { headers: { Authorization: token } });
     onCreatedComment();
   };
 
@@ -45,14 +47,26 @@ function CreateComment(props) {
       <div className={classes.buttonContainer}>
         <AuthContext.Consumer>
           {(auth) => (
-            <Button
-              edge="end"
-              variant="contained"
-              color="secondary"
-              onClick={onCreate(auth.token)}
-            >
-              Add Comment
-            </Button>
+            <>
+              {isSubcomment && (
+                <Button
+                  edge="end"
+                  variant="contained"
+                  onClick={props.onCancel}
+                  className={classes.cancelButton}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                edge="end"
+                variant="contained"
+                color="secondary"
+                onClick={onCreate(auth.token)}
+              >
+                Add Comment
+              </Button>
+            </>
           )}
         </AuthContext.Consumer>
       </div>

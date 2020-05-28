@@ -130,6 +130,7 @@ function Detail(props) {
                       <DeleteIcon />
                     </IconButton>
                     <EditPost
+                      token={auth.token}
                       post={post}
                       isOpen={isEditPostOpen}
                       onClose={onEditPostClose}
@@ -164,6 +165,7 @@ function Detail(props) {
                         _postId={post._id}
                         _postAuthorId={post.author._id}
                         onDeletedComment={requestAgain}
+                        onCreatedComment={requestAgain}
                       ></Comment>
                     </div>
                   )
