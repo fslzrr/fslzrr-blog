@@ -34,7 +34,7 @@ function Landing(props) {
           Trust me... They'll be charmed
         </Typography>
       </div>
-      <div className={classes.contentContainer}>alksmd</div>
+      <div className={classes.contentContainer}></div>
     </>
   );
 }
