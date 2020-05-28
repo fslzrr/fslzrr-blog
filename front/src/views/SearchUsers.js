@@ -48,10 +48,7 @@ function SearchUsers(props) {
       { _friendId },
       { headers: { Authorization: props.token } }
     );
-    props.setUser({
-      ...props.user,
-      friendRequests: [...props.user.friendRequests, _friendId],
-    });
+    requestAgain();
   };
 
   const classes = useStyles();
@@ -71,9 +68,9 @@ function SearchUsers(props) {
         <List>
           {users &&
             users.map((user) => {
-              const alreadySentReq = props.user.friendRequests.find(
-                (fr) => fr === user._id
-              );
+              const alreadySentReq =
+                user.friendRequests &&
+                user.friendRequests.find((fr) => fr === props.user._id);
               return (
                 <ListItem className={classes.listItem}>
                   <ListItemText primary={user.name} secondary={user.email} />

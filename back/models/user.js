@@ -39,13 +39,13 @@ const User = {
         _id: { $ne: _id },
         name: { $regex: name, $options: "i" },
       })
-      .select("_id name email");
+      .select("_id name email friendRequests");
     return users;
   },
   sendFriendRequest: async (_id, _friendId) => {
     const user = userCollection.updateOne(
-      { _id },
-      { $push: { friendRequests: _friendId } }
+      { _id: _friendId },
+      { $push: { friendRequests: _id } }
     );
     return user;
   },
