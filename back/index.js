@@ -21,14 +21,14 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(
-  jwt({
-    secret: JWT.secret,
-    credentialsRequired: JWT.credentialsRequired,
-  }).unless({
-    path: JWT.usecurePaths,
-  })
-);
+// app.use(
+//   jwt({
+//     secret: JWT.secret,
+//     credentialsRequired: JWT.credentialsRequired,
+//   }).unless({
+//     path: JWT.usecurePaths,
+//   })
+// );
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
