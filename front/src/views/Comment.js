@@ -45,16 +45,15 @@ function Comment(props) {
               <Typography variant="overline" color="textSecondary">
                 {date.format("DD/MM/YYYY hh:mm a")}
               </Typography>
-              {auth.user &&
-                (auth.user.isOwner || author._id === auth.user._id) && (
-                  <IconButton
-                    color="secondary"
-                    aria-label="delete"
-                    onClick={onDeleteComment(auth.token, _id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                )}
+              {author._id === auth.user._id && (
+                <IconButton
+                  color="secondary"
+                  aria-label="delete"
+                  onClick={onDeleteComment(auth.token, _id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
             </div>
           )}
         </AuthContext.Consumer>

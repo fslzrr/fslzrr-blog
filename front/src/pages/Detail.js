@@ -161,27 +161,27 @@ function Detail(props) {
           </Typography>
         </div>
       )}
-      {post.comments.length > 0 &&
-        post.comments.map((comment) => (
-          <div key={comment._id} className={classes.comment}>
-            <Comment
-              comment={comment}
-              _postId={post._id}
-              onDeletedComment={requestAgain}
-            ></Comment>
-          </div>
-        ))}
       <AuthContext.Consumer>
-        {(auth) => {
-          return (
-            auth.user && (
+        {(auth) => (
+          <>
+            {post.comments.length > 0 &&
+              post.comments.map((comment) => (
+                <div key={comment._id} className={classes.comment}>
+                  <Comment
+                    comment={comment}
+                    _postId={post._id}
+                    onDeletedComment={requestAgain}
+                  ></Comment>
+                </div>
+              ))}
+            {auth.user && (
               <CreateComment
                 _postId={post._id}
                 onCreatedComment={requestAgain}
               ></CreateComment>
-            )
-          );
-        }}
+            )}
+          </>
+        )}
       </AuthContext.Consumer>
       <div className={classes.fab}>
         <Typography>{post.claps}</Typography>
