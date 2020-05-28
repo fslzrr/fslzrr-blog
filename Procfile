@@ -1,1 +1,1 @@
-web: node back/index.js
+web: cd back && yarn start
