@@ -58,18 +58,24 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [query, setQuery] = useState({});
+  const [justUsers, setJustUsers] = useState(false);
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [orderBy, setOrderBy] = useState(1);
   const [requestAgain, setRequestAgain] = useState(1);
 
+  const onToggleJustUsers = () => setJustUsers(!justUsers);
   const onSearchChanged = (set, value) => {
     set(value);
   };
   const onSearch = () => {
     const qName = name === "" ? {} : { name };
     const qTitle = title === "" ? { ...qName } : { ...qName, title };
-    const q = { ...qTitle, orderBy: orderBy === 1 ? "latest" : "claps" };
+    const q = {
+      ...qTitle,
+      justUsers,
+      orderBy: orderBy === 1 ? "latest" : "claps",
+    };
     setQuery(q);
     setRequestAgain(requestAgain + 1);
   };
@@ -185,7 +191,10 @@ function App() {
         onClose={onUsersClose}
       ></SearchUsers>
       <Menu open={isProfileOpen} onClose={onProfileClose} anchorEl={anchorEl}>
-        <Account></Account>
+        <Account
+          justUsers={justUsers}
+          onToggleJustUsers={onToggleJustUsers}
+        ></Account>
       </Menu>
       <div className={classes.heroImage}></div>
       <div className={classes.container}>

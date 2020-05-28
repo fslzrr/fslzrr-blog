@@ -8,6 +8,8 @@ import {
   makeStyles,
   ListItemSecondaryAction,
   Badge,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useRequest, deleteR, post } from "../hooks/useRequest";
@@ -75,6 +77,18 @@ function Profile(props) {
       <Typography>{user.name}</Typography>
       <Typography variant="caption">{user.email}</Typography>
       <List className={classes.list}>
+        <ListItem>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={props.justUsers}
+                onChange={props.onToggleJustUsers}
+                inputProps={{ "aria-label": "is public" }}
+              />
+            }
+            label="Just My Posts"
+          />
+        </ListItem>
         <ListItem
           button
           onClick={() => {

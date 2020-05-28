@@ -40,6 +40,8 @@ function Account(props) {
                 <Profile
                   user={auth.user}
                   token={auth.token}
+                  justUsers={props.justUsers}
+                  onToggleJustUsers={props.onToggleJustUsers}
                   setAuth={auth.setAuth}
                   onLogOut={auth.clearAuth}
                 ></Profile>

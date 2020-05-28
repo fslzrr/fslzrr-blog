@@ -76,15 +76,18 @@ const Post = {
       ? [{ title: { $regex: query.title, $options: "i" } }]
       : [];
 
-    const author = query.name ? [] : [];
-
     const { friends } = await User.findById(_id);
+
+    const author = query.justUsers
+      ? [{ author: _id }]
+      : [{ author: { $in: [...friends, _id] } }];
+
     const foundPosts = await postCollection
       .find({
         $and: [
           { $or: [{ isPublic: true }, { author: _id, isPublic: false }] },
-          { author: { $in: [...friends, _id] } },
-          ...[...title, ...author],
+          ...author,
+          ...title,
         ],
       })
       .select("_id title content updatedDate author")

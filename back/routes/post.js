@@ -11,7 +11,9 @@ router
     try {
       const posts = await Post.findAll(
         _id,
-        req.body === undefined ? { orderBy: "latest" } : req.body
+        req.body === undefined
+          ? { orderBy: "latest", justUsers: false }
+          : req.body
       );
       res.send(posts);
     } catch (error) {
