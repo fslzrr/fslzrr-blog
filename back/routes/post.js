@@ -11,7 +11,7 @@ router
     try {
       const posts = await Post.findAll(
         _id,
-        req.body === undefined
+        !req.body.orderBy || req.body.justUsers === undefined
           ? { orderBy: "latest", justUsers: false }
           : req.body
       );
