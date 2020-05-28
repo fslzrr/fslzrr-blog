@@ -10,6 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Typography,
 } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -127,52 +128,61 @@ function App() {
       <AppBar position="static">
         <Toolbar>
           <CodeIcon className={classes.icon} />
-          <div className={classes.searchContainer}>
-            <TextField
-              fullWidth
-              variant="filled"
-              color="secondary"
-              label="User"
-              onChange={(event) =>
-                onSearchChanged(setName, event.target.value.trim())
-              }
-            ></TextField>
-            <TextField
-              fullWidth
-              variant="filled"
-              color="secondary"
-              label="Title"
-              onChange={(event) =>
-                onSearchChanged(setTitle, event.target.value.trim())
-              }
-            ></TextField>
-            <FormControl fullWidth variant="filled" color="secondary">
-              <InputLabel id="order">Order By</InputLabel>
-              <Select
-                labelId="order"
-                id="order"
-                value={orderBy}
-                onChange={(event) =>
-                  onSearchChanged(setOrderBy, event.target.value)
-                }
+          {user && (
+            <>
+              <div className={classes.searchContainer}>
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  color="secondary"
+                  label="User"
+                  onChange={(event) =>
+                    onSearchChanged(setName, event.target.value.trim())
+                  }
+                ></TextField>
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  color="secondary"
+                  label="Title"
+                  onChange={(event) =>
+                    onSearchChanged(setTitle, event.target.value.trim())
+                  }
+                ></TextField>
+                <FormControl fullWidth variant="filled" color="secondary">
+                  <InputLabel id="order">Order By</InputLabel>
+                  <Select
+                    labelId="order"
+                    id="order"
+                    value={orderBy}
+                    onChange={(event) =>
+                      onSearchChanged(setOrderBy, event.target.value)
+                    }
+                  >
+                    <MenuItem value={1}>Latest</MenuItem>
+                    <MenuItem value={2}>Most Claps</MenuItem>
+                  </Select>
+                </FormControl>
+                <IconButton edge="end" aria-label="menu" onClick={onSearch}>
+                  <SearchIcon />
+                </IconButton>
+              </div>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                ref={anchorEl}
+                onClick={onUsersOpen}
               >
-                <MenuItem value={1}>Latest</MenuItem>
-                <MenuItem value={2}>Most Claps</MenuItem>
-              </Select>
-            </FormControl>
-            <IconButton edge="end" aria-label="menu" onClick={onSearch}>
-              <SearchIcon />
-            </IconButton>
-          </div>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            ref={anchorEl}
-            onClick={onUsersOpen}
-          >
-            <GroupAddIcon />
-          </IconButton>
+                <GroupAddIcon />
+              </IconButton>
+            </>
+          )}
+          {!user && (
+            <div className={classes.searchContainer}>
+              <Typography variant="h6">TechBlogs</Typography>
+            </div>
+          )}
           <IconButton
             color="inherit"
             aria-label="menu"
