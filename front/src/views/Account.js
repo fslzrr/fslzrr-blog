@@ -37,7 +37,12 @@ function Account(props) {
                 ></SignUp>
               )}
               {auth.user && (
-                <Profile user={auth.user} onLogOut={auth.clearAuth}></Profile>
+                <Profile
+                  user={auth.user}
+                  token={auth.token}
+                  setAuth={auth.setAuth}
+                  onLogOut={auth.clearAuth}
+                ></Profile>
               )}
             </>
           );

@@ -29,6 +29,12 @@ const User = {
     const createdUser = await userCollection.create(newUser);
     return createdUser;
   },
+  findMe: async (_id) => {
+    const me = await userCollection
+      .findOne({ _id })
+      .populate("friends friendRequests");
+    return me;
+  },
   findByEmail: async (email) => {
     const user = await userCollection.findOne({ email });
     return user;
@@ -39,7 +45,7 @@ const User = {
         _id: { $ne: _id },
         name: { $regex: name, $options: "i" },
       })
-      .select("_id name email friendRequests");
+      .select("_id name email friends friendRequests");
     return users;
   },
   sendFriendRequest: async (_id, _friendId) => {
@@ -58,24 +64,45 @@ const User = {
       { _id },
       { $push: { friends: _friendId } }
     );
+    const createFriendPromise = userCollection.updateOne(
+      { _id: _friendId },
+      { $push: { friends: _id } }
+    );
     const [deleted, created] = await Promise.all([
       deletePromise,
       createPromise,
+      createFriendPromise,
     ]);
     return created;
   },
   deleteFriendRequest: async (_id, _friendId) => {
-    const deleted = await userCollection.updateOne(
+    const deletedPromise = userCollection.updateOne(
       { _id },
       { $pull: { friendRequests: _friendId } }
     );
+    const deletedFriendPromise = userCollection.updateOne(
+      { _id: _friendId },
+      { $pull: { friendRequests: _id } }
+    );
+    const [deleted, deletedFriend] = await Promise.all([
+      deletedPromise,
+      deletedFriendPromise,
+    ]);
     return deleted;
   },
   deleteFriend: async (_id, _friendId) => {
-    const deleted = await userCollection.updateOne(
+    const deletedPromise = userCollection.updateOne(
       { _id },
       { $pull: { friends: _friendId } }
     );
+    const deletedFriendPromise = userCollection.updateOne(
+      { _id: _friendId },
+      { $pull: { friends: _id } }
+    );
+    const [deleted, deletedFriend] = await Promise.all([
+      deletedPromise,
+      deletedFriendPromise,
+    ]);
     return deleted;
   },
 };

@@ -66,24 +66,31 @@ function SearchUsers(props) {
           onChange={onSearchChange}
         />
         <List>
-          {users &&
+          {props.user &&
+            users &&
             users.map((user) => {
               const alreadySentReq =
                 user.friendRequests &&
                 user.friendRequests.find((fr) => fr === props.user._id);
+              const alreadyFriend =
+                user.friends &&
+                user.friends.find((fr) => fr === props.user._id);
               return (
-                <ListItem className={classes.listItem}>
+                <ListItem key={user._id} className={classes.listItem}>
                   <ListItemText primary={user.name} secondary={user.email} />
+
                   <ListItemSecondaryAction>
-                    <IconButton
-                      color="primary"
-                      edge="end"
-                      aria-label="send friend request"
-                      disabled={alreadySentReq}
-                      onClick={onSendFriendRequest(user._id)}
-                    >
-                      <PersonAddIcon />
-                    </IconButton>
+                    {!alreadyFriend && (
+                      <IconButton
+                        color="primary"
+                        edge="end"
+                        aria-label="send friend request"
+                        disabled={alreadySentReq}
+                        onClick={onSendFriendRequest(user._id)}
+                      >
+                        <PersonAddIcon />
+                      </IconButton>
+                    )}
                   </ListItemSecondaryAction>
                 </ListItem>
               );

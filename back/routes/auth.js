@@ -5,6 +5,17 @@ const AuthUtils = require("../utils/auth");
 
 const router = express.Router();
 
+router.route("/").get(async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const user = await User.findMe(_id);
+    res.send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(406).send(Errors.generic.default);
+  }
+});
+
 router.route("/login").post(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
